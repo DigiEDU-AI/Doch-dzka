@@ -10,18 +10,25 @@
   ],
   "schedules": [
     {
-      "id": "05ccca93-2823-4599-97cb-28f982ad9a36",
+      "id": "03caa3cf-eb1b-4591-9558-efdbcb855384",
       "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
       "date": "2026-04-15",
       "start_time": "08:00",
       "end_time": "11:30"
     },
     {
-      "id": "082e701d-cc6b-4421-832f-ef047d933e95",
+      "id": "3d9e18ea-f7e4-430d-8ebf-2d42f142bb00",
       "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
       "date": "2026-04-15",
       "start_time": "12:00",
       "end_time": "13:30"
+    },
+    {
+      "id": "a25aa818-ee25-42bf-9c58-8e8ca77d0316",
+      "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
+      "date": "2026-04-15",
+      "start_time": "14:00",
+      "end_time": "14:30"
     }
   ]
 }
