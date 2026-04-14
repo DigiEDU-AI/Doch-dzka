@@ -1,34 +1,4 @@
 {
-  "users": [
-    {
-      "id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
-      "username": "1000",
-      "display_name": "TEST",
-      "color": "#06b6d4",
-      "password": "123456"
-    }
-  ],
-  "schedules": [
-    {
-      "id": "1b525091-64c1-42b1-96b9-8efbdd5b613e",
-      "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
-      "date": "2026-04-15",
-      "start_time": "08:00",
-      "end_time": "15:30"
-    },
-    {
-      "id": "56fc1bbe-087a-4560-b08f-a74b39565ceb",
-      "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
-      "date": "2026-04-16",
-      "start_time": "08:00",
-      "end_time": "15:30"
-    },
-    {
-      "id": "43830603-5833-491b-badb-cdef7fba4c63",
-      "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
-      "date": "2026-04-17",
-      "start_time": "08:00",
-      "end_time": "15:30"
-    }
-  ]
+  "users": [],
+  "schedules": []
 }
