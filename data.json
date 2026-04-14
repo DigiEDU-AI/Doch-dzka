@@ -10,11 +10,11 @@
   ],
   "schedules": [
     {
-      "id": "ec14bd9b-dc8d-441a-99b6-ecfe403248bb",
+      "id": "a4e85221-e602-4ac1-bd72-2fd2fcbd00a3",
       "user_id": "717a6378-1f2e-4637-90ec-076fd74b50b8",
       "date": "2026-04-15",
       "start_time": "08:00",
-      "end_time": "13:30"
+      "end_time": "14:00"
     }
   ]
 }
