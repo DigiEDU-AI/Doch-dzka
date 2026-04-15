@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dochádzkový systém</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
 :root{
   --bg:#090909; --bg-panel:rgba(255,255,255,0.04);
@@ -212,6 +213,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   opacity:0;transform:translateX(14px);transition:all .2s;pointer-events:auto}
 .toast.on{opacity:1;transform:translateX(0)}
 .toast.ok{border-color:rgba(16,185,129,.35)}.toast.err{border-color:rgba(239,68,68,.35)}.toast.inf{border-color:rgba(59,130,246,.28)}
+/* EXPORT */
+.export-bar{display:none;justify-content:center;padding:16px;}
+.export-bar.show{display:flex}
+.btn-export{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:var(--radius-s);font-size:14px;font-weight:700;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(16,185,129,.35);transition:opacity .2s}
+.btn-export:hover{opacity:.88}
+#export-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:5000;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+#export-modal.on{display:flex}
+.exp-box{width:100%;max-width:380px;background:#111;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:28px 26px;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.exp-h{font-size:17px;font-weight:700;margin-bottom:6px}
+.exp-sub{font-size:13px;color:var(--text-m);margin-bottom:20px}
+.exp-sel{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:16px}
+.exp-sel:focus{border-color:var(--green)}
+.exp-btns{display:flex;gap:10px}
+.btn-exp-go{flex:1;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:var(--radius-s);padding:11px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn-exp-go:hover{opacity:.88}
+.btn-exp-cancel{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-s);padding:11px;font-size:14px;font-weight:600;color:var(--text-m);cursor:pointer;transition:all .18s}
+.btn-exp-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
   </style>
 </head>
 <body>
@@ -273,9 +291,24 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div class="cal-wrap"><div class="cal-scroll"><table class="cal-table" id="cal-table"></table></div></div>
     <div class="legend"><span class="leg-lbl">Legenda:</span><div class="leg-items" id="legend-items"></div></div>
     <div class="qlinks" id="qlinks"></div>
+    <div class="export-bar" id="export-bar">
+      <button class="btn-export" onclick="openExport()">⬇ Exportovať do Excelu</button>
+    </div>
   </main>
 </div>
 
+<!-- EXPORT MODAL -->
+<div id="export-modal">
+  <div class="exp-box">
+    <div class="exp-h">⬇ Export do Excelu</div>
+    <div class="exp-sub">Vyber mesiac — každý aktívny používateľ dostane vlastnú záložku s harmonogramom a počtom hodín.</div>
+    <select class="exp-sel" id="exp-month"></select>
+    <div class="exp-btns">
+      <button class="btn-exp-go" onclick="doExport()">📊 Exportovať</button>
+      <button class="btn-exp-cancel" onclick="closeExport()">Zrušiť</button>
+    </div>
+  </div>
+</div>
 <!-- ADMIN -->
 <div id="screen-admin" class="screen">
   <header class="app-hdr">
@@ -329,7 +362,7 @@ const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'PearlJam22';
 const MIN_STAFF  = 2;
 const QUICK_LINKS = [
-  { icon:'📋', label:'Digi EDU AI Asistent', url:'https://digiedu-ai.github.io/DigiEDU/' },
+  { icon:'📋', label:'Plánovač zmien', url:'https://example.com' },
   { icon:'📊', label:'Štatistiky',     url:'https://example.com' },
   { icon:'💬', label:'Firemný chat',   url:'https://example.com' },
 ];
@@ -494,6 +527,7 @@ function enterApp(user){
   document.getElementById('ctrl-panel').style.display='';
   weekStart=getMonday();
   renderCal(); renderLegend(); renderQLinks(); updateWeekLbl(); fillControls();
+  document.getElementById('export-bar').classList.remove('show');
   setSyncDot('ok'); startSSE(); showScreen('app');
 }
 
@@ -505,6 +539,7 @@ function enterHost(){
   document.getElementById('ctrl-panel').style.display='none';
   weekStart=getMonday();
   renderCal(); renderLegend(); renderQLinks(); updateWeekLbl();
+  document.getElementById('export-bar').classList.add('show');
   setSyncDot('ok'); startSSE(); showScreen('app');
 }
 
@@ -513,6 +548,7 @@ function doLogout(){
   document.getElementById('u-un').value='';
   document.getElementById('u-pw').value='';
   document.getElementById('low-warn').classList.remove('show');
+  document.getElementById('export-bar').classList.remove('show');
   showScreen('login');
 }
 
@@ -758,3 +794,136 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
+
+<script>
+/* ═══ EXPORT DO EXCELU ══════════════════════════════
+   Jedna záložka = jeden aktívny používateľ v mesiaci
+   Obsah: meno, login, harmonogram, hodiny/deň, suma
+═══════════════════════════════════════════════════ */
+
+function openExport(){
+  // Naplň výber mesiacov (aktuálny + 11 predchádzajúcich)
+  const sel = document.getElementById('exp-month');
+  sel.innerHTML = '';
+  const now = new Date();
+  for(let i = 0; i < 12; i++){
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const val = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const SK_MONTHS = ['Január','Február','Marec','Apríl','Máj','Jún','Júl','August','September','Október','November','December'];
+    const lbl = `${SK_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+    sel.innerHTML += `<option value="${val}">${lbl}</option>`;
+  }
+  document.getElementById('export-modal').classList.add('on');
+}
+
+function closeExport(){
+  document.getElementById('export-modal').classList.remove('on');
+}
+
+function doExport(){
+  const monthVal = document.getElementById('exp-month').value; // "2026-04"
+  const [year, month] = monthVal.split('-').map(Number);
+
+  const SK_MONTHS = ['Január','Február','Marec','Apríl','Máj','Jún','Júl','August','September','Október','November','December'];
+  const monthName = SK_MONTHS[month-1];
+  const DAY_SK = ['Ne','Po','Ut','St','Št','Pi','So'];
+
+  // Všetky pracovné dni daného mesiaca (Po-Pi)
+  const workDays = [];
+  const daysInMonth = new Date(year, month, 0).getDate();
+  for(let d = 1; d <= daysInMonth; d++){
+    const date = new Date(year, month-1, d);
+    const dow = date.getDay(); // 0=Ne, 6=So
+    if(dow >= 1 && dow <= 5){
+      const dateStr = `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      workDays.push({ dateStr, date, dow });
+    }
+  }
+
+  // Nájdi aktívnych používateľov v tomto mesiaci
+  const activeUsers = db.users.filter(u =>
+    db.schedules.some(s => s.user_id === u.id && s.date.startsWith(monthVal))
+  );
+
+  if(!activeUsers.length){
+    toast('Žiadni aktívni používatelia v tomto mesiaci','inf');
+    return;
+  }
+
+  const wb = XLSX.utils.book_new();
+
+  activeUsers.forEach(user => {
+    const rows = [];
+
+    // HLAVIČKA
+    rows.push(['Meno:', user.display_name]);
+    rows.push(['Login:', user.username]);
+    rows.push(['Mesiac:', `${monthName} ${year}`]);
+    rows.push([]);
+
+    // TABUĽKA - hlavičky stĺpcov
+    rows.push(['Dátum', 'Deň', 'Začiatok', 'Koniec', 'Hodiny']);
+
+    let totalMinutes = 0;
+
+    workDays.forEach(({ dateStr, date, dow }) => {
+      // Nájdi všetky intervaly pre tento deň
+      const daySchedules = db.schedules.filter(s => s.user_id === user.id && s.date === dateStr);
+
+      if(daySchedules.length === 0){
+        // Neprítomný
+        const dateLabel = `${String(date.getDate()).padStart(2,'0')}.${String(month).padStart(2,'0')}.${year}`;
+        rows.push([dateLabel, DAY_SK[dow], '–', '–', 0]);
+      } else {
+        // Spočítaj hodiny (môže byť viac intervalov)
+        let dayMin = 0;
+        const starts = [], ends = [];
+        daySchedules.forEach(s => {
+          const a = t2m(s.start_time), b = t2m(s.end_time);
+          dayMin += b - a;
+          starts.push(s.start_time);
+          ends.push(s.end_time);
+        });
+        totalMinutes += dayMin;
+        const hrs = (dayMin / 60).toFixed(2);
+        const dateLabel = `${String(date.getDate()).padStart(2,'0')}.${String(month).padStart(2,'0')}.${year}`;
+        // Ak viac intervalov, spoj ich
+        const startStr = starts.sort()[0];
+        const endStr   = ends.sort().at(-1);
+        rows.push([dateLabel, DAY_SK[dow], startStr, endStr, parseFloat(hrs)]);
+      }
+    });
+
+    // SÚČET
+    rows.push([]);
+    rows.push(['', '', '', 'SPOLU:', parseFloat((totalMinutes/60).toFixed(2))]);
+
+    // Vytvor sheet
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+
+    // Šírky stĺpcov
+    ws['!cols'] = [
+      {wch: 14}, // Dátum
+      {wch: 6},  // Deň
+      {wch: 10}, // Začiatok
+      {wch: 10}, // Koniec
+      {wch: 10}, // Hodiny
+    ];
+
+    // Štýl hlavičky (tučné)
+    ['A1','B1','A2','B2','A3','B3'].forEach(cell => {
+      if(ws[cell]) ws[cell].s = { font: { bold: true } };
+    });
+
+    // Bezpečný názov záložky (max 31 znakov, bez špeciálnych)
+    const sheetName = user.display_name.replace(/[:\\\/\?\*\[\]]/g,'').slice(0, 31);
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+
+  // Stiahnuť
+  const fileName = `Dochadzka_${monthName}_${year}.xlsx`;
+  XLSX.writeFile(wb, fileName);
+  closeExport();
+  toast('Excel exportovaný: ' + fileName, 'ok', 3000);
+}
+</script>
