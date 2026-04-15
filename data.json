@@ -1,4 +1,12 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "859bd84b-c5b3-4e7c-b53c-97745e27cc26",
+      "username": "1000",
+      "display_name": "Tono Test",
+      "color": "#ec4899",
+      "password": "123456"
+    }
+  ],
   "schedules": []
 }
