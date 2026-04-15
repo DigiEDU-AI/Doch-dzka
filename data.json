@@ -1,31 +1,3 @@
-{
-  "users": [
-    {
-      "id": "859bd84b-c5b3-4e7c-b53c-97745e27cc26",
-      "username": "1000",
-      "display_name": "Tono Test",
-      "color": "#ec4899",
-      "password": "123456"
-    }
-  ],
-  "schedules": [
-    {
-      "id": "31721eae-c941-4875-8dae-7caed08ffb36",
-      "user_id": "859bd84b-c5b3-4e7c-b53c-97745e27cc26",
-      "date": "2026-04-15",
-      "start_time": "08:00",
-      "end_time": "15:30"
-    },
-    {
-      "id": "c2e80efc-09ba-4cac-8245-4275085f8a57",
-      "user_id": "859bd84b-c5b3-4e7c-b53c-97745e27cc26",
-      "date": "2026-04-16",
-      "start_time": "08:00",
-      "end_time": "08:30"
-    }
-  ]
-}
-
 <!DOCTYPE html>
 <html lang="sk">
 <head>
@@ -53,7 +25,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .screen{display:none}.screen.active{display:block}
 #screen-login.active{display:flex}
 
-/* LOGIN */
 #screen-login{align-items:center;justify-content:center;min-height:100vh;padding:20px;
   background:radial-gradient(ellipse at 50% 35%,rgba(59,130,246,.08) 0%,transparent 65%)}
 .login-box{width:100%;max-width:360px;background:rgba(255,255,255,.035);
@@ -86,7 +57,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   cursor:pointer;transition:color .15s}
 .link-btn:hover{color:var(--text-m)}
 
-/* HEADER */
 .app-hdr{display:flex;align-items:center;gap:12px;padding:9px 18px;
   background:rgba(9,9,9,.92);border-bottom:1px solid rgba(255,255,255,.06);
   position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
@@ -112,12 +82,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sync-dot.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* WARN */
 #low-warn{display:none;align-items:center;gap:10px;padding:8px 18px;font-size:13px;
   color:#fca5a5;background:rgba(239,68,68,.09);border-bottom:1px solid rgba(239,68,68,.18)}
 #low-warn.show{display:flex}
 
-/* MAIN */
 #app-main{padding:13px 16px;max-width:1440px;margin:0 auto}
 .ctrl-panel{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
   border-radius:var(--radius);padding:10px 14px;margin-bottom:11px;
@@ -139,7 +107,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   color:var(--red);padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
 .btn-clr:hover{background:rgba(239,68,68,.18)}
 
-/* CALENDAR */
 .cal-wrap{border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);
   margin-bottom:11px;overflow:hidden;box-shadow:0 6px 28px rgba(0,0,0,.5)}
 .cal-scroll{overflow-x:auto}
@@ -183,7 +150,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .snames{display:flex;flex-direction:column;gap:2px}
 .sname{font-size:10px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:115px;margin:0 auto;opacity:.8}
 
-/* LEGEND + QUICK LINKS */
 .legend{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
   border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;
   gap:14px;flex-wrap:wrap;margin-bottom:9px}
@@ -198,7 +164,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   color:var(--text-m);text-decoration:none;transition:all .18s}
 .qlink:hover{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.28);color:var(--blue)}
 
-/* ADMIN */
 #screen-admin.active{display:block}
 .admin-wrap{max-width:1080px;margin:0 auto;padding:18px}
 .panel{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);margin-bottom:16px;overflow:hidden}
@@ -235,7 +200,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .acts{display:flex;gap:5px;align-items:center}
 .empty{padding:26px;text-align:center;color:var(--text-d);font-size:13px}
 
-/* LOADING / TOAST */
 #loading{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:10000;
   align-items:center;justify-content:center;flex-direction:column;gap:14px;backdrop-filter:blur(6px)}
 #loading.on{display:flex}
@@ -255,7 +219,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div id="loading"><div class="spinner"></div><div class="load-txt" id="load-txt">Načítavam…</div></div>
 <div id="toasts"></div>
 
-<!-- ═══ LOGIN ═══ -->
+<!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-box">
     <div class="login-icon">📅</div>
@@ -273,7 +237,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
-<!-- ═══ KALENDÁR ═══ -->
+<!-- KALENDÁR -->
 <div id="screen-app" class="screen">
   <div id="low-warn">⚠️ &nbsp;Nedostatočné pokrytie: <strong id="warn-days"></strong></div>
   <header class="app-hdr">
@@ -312,7 +276,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </main>
 </div>
 
-<!-- ═══ ADMIN ═══ -->
+<!-- ADMIN -->
 <div id="screen-admin" class="screen">
   <header class="app-hdr">
     <span class="hdr-logo">⚙️</span><span class="hdr-title">Správa používateľov</span>
@@ -353,21 +317,19 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 </div>
 
 <script>
-/* ╔══════════════════════════════════════════════════╗
-   ║  JSONBIN.IO — jednoduchý REST, bez SHA, bez cache║
-   ╚══════════════════════════════════════════════════╝ */
-const BIN_ID  = '69df352036566621a8b58299';
-const BIN_KEY = '$2a$10$J08HoVTNngQ1uETRXIYnee1fCMM8sKW/KjbJ8GN17faV5BalbL5cm';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+/* ═══════════════════════════════════════════════════
+   FIREBASE REALTIME DATABASE
+   Čítanie:  GET  .../data.json          → žiadny limit
+   Zápis:    PUT  .../data.json          → žiadny SHA
+   Realtime: GET  .../data.json?sse=true → živé zmeny
+═══════════════════════════════════════════════════ */
+const FB_URL = 'https://digiedu-d0df2-default-rtdb.europe-west1.firebasedatabase.app/data';
 
-/* Admin */
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'PearlJam22';
-
-/* Nastavenia */
-const MIN_STAFF   = 2;
+const MIN_STAFF  = 2;
 const QUICK_LINKS = [
-  { icon:'📋', label:'Plánovač zmien', url:'https://example.com' },
+  { icon:'📋', label:'Digi EDU AI Asistent', url:'https://digiedu-ai.github.io/DigiEDU/' },
   { icon:'📊', label:'Štatistiky',     url:'https://example.com' },
   { icon:'💬', label:'Firemný chat',   url:'https://example.com' },
 ];
@@ -385,7 +347,7 @@ let isHost    = false;
 let weekStart = null;
 let saveTimer = null;
 let isSaving  = false;
-let pollTimer = null;
+let sseSource = null;
 
 /* ═══ UTILS ════════════════════════════════════════ */
 const m2t = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
@@ -398,7 +360,7 @@ const esc   = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(
 const uid   = () => crypto.randomUUID();
 function randColor(id){ document.getElementById(id).value=COLORS[Math.floor(Math.random()*COLORS.length)]; }
 function getMonday(d=new Date()){ const c=new Date(d),day=c.getDay(); c.setDate(c.getDate()-(day===0?6:day-1)); c.setHours(0,0,0,0); return c; }
-function weekDates(mon){ return [0,1,2,3,4].map(i=>{ const d=new Date(mon); d.setDate(d.getDate()+i); const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; }); }
+function weekDates(mon){ return [0,1,2,3,4].map(i=>{ const d=new Date(mon); d.setDate(d.getDate()+i); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }); }
 
 /* ═══ UI ════════════════════════════════════════════ */
 function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+id).classList.add('active'); }
@@ -413,48 +375,68 @@ function toast(msg,type='inf',ms=3500){
   setTimeout(()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),250); },ms);
 }
 
-/* ═══ JSONBIN API ═══════════════════════════════════
-   READ  → GET  /latest  → vráti { record: {...} }
-   WRITE → PUT  /        → pošle JSON, uloží
-   Žiadne SHA! Žiadny base64! Žiadne konflikty!
+/* ═══ FIREBASE REST API ═════════════════════════════
+   Firebase Realtime DB REST:
+   GET  /data.json  → načíta všetko
+   PUT  /data.json  → prepíše všetko
+   Žiadny API kľúč pre test/public mode!
 ═══════════════════════════════════════════════════ */
-const BIN_HEADERS = {
-  'Content-Type':  'application/json',
-  'X-Master-Key':  BIN_KEY,
-  'X-Bin-Versioning': 'false'   // nechceme verzionovanie — stačí posledný stav
-};
-
-async function binRead(){
-  const r = await fetch(BIN_URL + '/latest', {
-    method: 'GET',
-    headers: BIN_HEADERS
-  });
-  if(!r.ok){
-    const txt = await r.text().catch(()=>'');
-    throw new Error(`JSONBin chyba ${r.status}: ${txt.slice(0,80)}`);
+async function fbRead(){
+  const r = await fetch(FB_URL + '.json', { cache:'no-store' });
+  if(!r.ok) throw new Error(`Firebase chyba ${r.status}`);
+  const data = await r.json();
+  if(data){
+    db = data;
+    db.users     = db.users     || [];
+    db.schedules = db.schedules || [];
+  } else {
+    db = {users:[], schedules:[]};
   }
-  const json = await r.json();
-  db = json.record || {users:[], schedules:[]};
-  db.users     = db.users     || [];
-  db.schedules = db.schedules || [];
 }
 
-async function binWrite(){
-  const r = await fetch(BIN_URL, {
+async function fbWrite(){
+  const r = await fetch(FB_URL + '.json', {
     method:  'PUT',
-    headers: BIN_HEADERS,
+    headers: {'Content-Type':'application/json'},
     body:    JSON.stringify(db)
   });
-  if(!r.ok){
-    const txt = await r.text().catch(()=>'');
-    throw new Error(`JSONBin zápis ${r.status}: ${txt.slice(0,80)}`);
-  }
+  if(!r.ok) throw new Error(`Firebase zápis ${r.status}`);
 }
 
+/* ═══ REALTIME SSE ══════════════════════════════════
+   Firebase podporuje Server-Sent Events (SSE)
+   = zmeny od iných používateľov prídu okamžite
+   bez pollingu, bez zbytočných requestov
+═══════════════════════════════════════════════════ */
+function startSSE(){
+  stopSSE();
+  try{
+    sseSource = new EventSource(FB_URL + '.json?accept=text/event-stream');
+    sseSource.addEventListener('put', e => {
+      try{
+        const payload = JSON.parse(e.data);
+        if(payload.path === '/' && payload.data){
+          const incoming = payload.data;
+          incoming.users     = incoming.users     || [];
+          incoming.schedules = incoming.schedules || [];
+          // Len ak nie sme práve my uprostred ukladania
+          if(!isSaving){
+            db = incoming;
+            renderCal();
+            renderLegend();
+          }
+        }
+      }catch(err){}
+    });
+    sseSource.onerror = () => { setSyncDot('err'); };
+    sseSource.onopen  = () => { setSyncDot('ok');  };
+  }catch(e){}
+}
+function stopSSE(){ if(sseSource){ sseSource.close(); sseSource=null; } }
+
 /* ═══ DEBOUNCED SAVE ════════════════════════════════
-   Klik → okamžitý lokálny update + render (bez čakania)
-   Zápis sa odloží o 500ms po POSLEDNOM kliku
-   = viac kliknutí = 1 write
+   Klik → okamžitý lokálny render
+   Zápis = 500ms po poslednom kliku (batch kliknutí)
 ═══════════════════════════════════════════════════ */
 function scheduleSave(){
   setSyncDot('saving');
@@ -463,81 +445,45 @@ function scheduleSave(){
 }
 
 async function doSave(){
-  if(isSaving){
-    saveTimer = setTimeout(doSave, 700);
-    return;
-  }
+  if(isSaving){ saveTimer=setTimeout(doSave,700); return; }
   isSaving = true;
   try{
-    await binWrite();
+    await fbWrite();
     setSyncDot('ok');
   }catch(e){
     setSyncDot('err');
-    toast('Chyba ukladania: '+e.message,'err',6000);
-  }finally{
-    isSaving = false;
-  }
+    toast('Chyba ukladania: '+e.message,'err',5000);
+  }finally{ isSaving=false; }
 }
 
-async function saveSyncBlocking(){
+async function saveBlocking(){
   showLoad('Ukladám…');
-  try{
-    await binWrite();
-    setSyncDot('ok');
-  }catch(e){
-    setSyncDot('err');
-    throw e;
-  }finally{ hideLoad(); }
+  try{ await fbWrite(); setSyncDot('ok'); }
+  catch(e){ setSyncDot('err'); throw e; }
+  finally{ hideLoad(); }
 }
 
-/* Poll každých 30s */
-function startPoll(){
-  stopPoll();
-  pollTimer = setInterval(async()=>{
-    if(isSaving) return;
-    try{ await binRead(); renderCal(); renderLegend(); setSyncDot('ok'); }
-    catch(e){ setSyncDot('err'); }
-  }, 30000);
-}
-function stopPoll(){ if(pollTimer){ clearInterval(pollTimer); pollTimer=null; } }
-
-/* ═══ LOGIN ═════════════════════════════════════════
-   Login používa DB načítaný pri štarte — žiadny extra request!
-═══════════════════════════════════════════════════ */
+/* ═══ LOGIN ═════════════════════════════════════════ */
 async function doLogin(){
   const un  = document.getElementById('u-un').value.trim().toLowerCase();
   const pw  = document.getElementById('u-pw').value;
   const err = document.getElementById('login-err');
   const btn = document.getElementById('btn-login');
-
   if(!un||!pw){ err.textContent='Vyplň meno aj heslo.'; return; }
   err.textContent=''; btn.disabled=true; btn.textContent='Prihlásenie…';
-
   try{
-    if(un===ADMIN_USER && pw===ADMIN_PASS){
-      await enterAdmin(); return;
-    }
-
-    // Hľadaj v pamäti
+    if(un===ADMIN_USER && pw===ADMIN_PASS){ await enterAdmin(); return; }
     let user = db.users.find(u=>u.username===un && u.password===pw);
-
     if(!user){
-      // Skús reload — možno sú nové dáta
       showLoad('Overujem…');
-      await binRead();
+      await fbRead();
       hideLoad();
       user = db.users.find(u=>u.username===un && u.password===pw);
     }
-
     if(!user){ err.textContent='Nesprávne meno alebo heslo.'; return; }
-
     enterApp(user);
-  }catch(e){
-    hideLoad();
-    err.textContent='Chyba: '+e.message;
-  }finally{
-    btn.disabled=false; btn.textContent='Prihlásiť sa';
-  }
+  }catch(e){ hideLoad(); err.textContent='Chyba: '+e.message; }
+  finally{ btn.disabled=false; btn.textContent='Prihlásiť sa'; }
 }
 
 function enterApp(user){
@@ -548,7 +494,7 @@ function enterApp(user){
   document.getElementById('ctrl-panel').style.display='';
   weekStart=getMonday();
   renderCal(); renderLegend(); renderQLinks(); updateWeekLbl(); fillControls();
-  setSyncDot('ok'); startPoll(); showScreen('app');
+  setSyncDot('ok'); startSSE(); showScreen('app');
 }
 
 function enterHost(){
@@ -559,11 +505,11 @@ function enterHost(){
   document.getElementById('ctrl-panel').style.display='none';
   weekStart=getMonday();
   renderCal(); renderLegend(); renderQLinks(); updateWeekLbl();
-  setSyncDot('ok'); startPoll(); showScreen('app');
+  setSyncDot('ok'); startSSE(); showScreen('app');
 }
 
 function doLogout(){
-  stopPoll(); me=null; isHost=false;
+  stopSSE(); me=null; isHost=false;
   document.getElementById('u-un').value='';
   document.getElementById('u-pw').value='';
   document.getElementById('low-warn').classList.remove('show');
@@ -573,20 +519,11 @@ function doLogout(){
 /* ═══ ADMIN ═════════════════════════════════════════ */
 async function enterAdmin(){
   showLoad('Načítavam admin…');
-  try{
-    await binRead();
-    renderAdminUsers();
-    randColor('a-col');
-    showScreen('admin');
-  }catch(e){ toast('Chyba: '+e.message,'err',6000); }
+  try{ await fbRead(); renderAdminUsers(); randColor('a-col'); showScreen('admin'); }
+  catch(e){ toast('Chyba: '+e.message,'err',6000); }
   finally{ hideLoad(); }
 }
-
-function adminLogout(){
-  showScreen('login');
-  document.getElementById('u-un').value='';
-  document.getElementById('u-pw').value='';
-}
+function adminLogout(){ showScreen('login'); document.getElementById('u-un').value=''; document.getElementById('u-pw').value=''; }
 
 function renderAdminUsers(){
   const users=db.users;
@@ -620,12 +557,8 @@ async function addUser(){
   if(!un||!dn||!pw){ toast('Vyplň všetky polia','err'); return; }
   if(db.users.some(u=>u.username===un)){ toast('"'+un+'" už existuje','err'); return; }
   db.users.push({id:uid(),username:un,display_name:dn,color:col,password:pw});
-  try{
-    await saveSyncBlocking();
-    toast(dn+' vytvorený!','ok');
-    ['a-un','a-dn','a-pw'].forEach(id=>document.getElementById(id).value='');
-    randColor('a-col'); renderAdminUsers();
-  }catch(e){ db.users.pop(); toast('Chyba: '+e.message,'err',6000); }
+  try{ await saveBlocking(); toast(dn+' vytvorený!','ok'); ['a-un','a-dn','a-pw'].forEach(id=>document.getElementById(id).value=''); randColor('a-col'); renderAdminUsers(); }
+  catch(e){ db.users.pop(); toast('Chyba: '+e.message,'err',6000); }
 }
 
 async function saveUser(uid_){
@@ -633,25 +566,20 @@ async function saveUser(uid_){
   const dn=row.querySelector('.edn').value.trim();
   const col=row.querySelector('.ecol-inp').value;
   const pw=row.querySelector('.epw').value.trim();
-  if(!dn||!pw){ toast('Meno ani heslo nesmú byť prázdne','err'); return; }
+  if(!dn||!pw){ toast('Polia nesmú byť prázdne','err'); return; }
   const u=db.users.find(u=>u.id===uid_); if(!u) return;
-  const backup={...u};
-  u.display_name=dn; u.color=col; u.password=pw;
-  try{
-    await saveSyncBlocking();
-    toast('Uložené','ok',2000); renderAdminUsers();
-  }catch(e){ Object.assign(u,backup); toast('Chyba: '+e.message,'err',6000); }
+  const bk={...u}; u.display_name=dn; u.color=col; u.password=pw;
+  try{ await saveBlocking(); toast('Uložené','ok',2000); renderAdminUsers(); }
+  catch(e){ Object.assign(u,bk); toast('Chyba: '+e.message,'err',6000); }
 }
 
 async function deleteUser(uid_,name){
   if(!confirm('Naozaj vymazať "'+name+'"?\nVymaže sa aj celá jeho dochádzka!')) return;
-  const bu=[...db.users], bs=[...db.schedules];
+  const bu=[...db.users],bs=[...db.schedules];
   db.users=db.users.filter(u=>u.id!==uid_);
   db.schedules=db.schedules.filter(s=>s.user_id!==uid_);
-  try{
-    await saveSyncBlocking();
-    toast(name+' vymazaný','ok'); renderAdminUsers();
-  }catch(e){ db.users=bu; db.schedules=bs; toast('Chyba: '+e.message,'err',6000); }
+  try{ await saveBlocking(); toast(name+' vymazaný','ok'); renderAdminUsers(); }
+  catch(e){ db.users=bu; db.schedules=bs; toast('Chyba: '+e.message,'err',6000); }
 }
 
 /* ═══ SCHEDULE ══════════════════════════════════════ */
@@ -672,8 +600,7 @@ function toIvs(set){
 function applyDay(date,set){
   db.schedules=db.schedules.filter(s=>!(s.user_id===me.id&&s.date===date));
   toIvs(set).forEach(([st,en])=>db.schedules.push({id:uid(),user_id:me.id,date,start_time:st,end_time:en}));
-  renderCal();
-  scheduleSave();
+  renderCal(); scheduleSave();
 }
 function toggleSlot(date,slot){
   if(!me||isHost) return;
@@ -689,8 +616,7 @@ function addInterval(){
   if(from>=to){ toast('"Od" musí byť pred "Do"','err'); return; }
   const set=getOccupied(me.id,date);
   for(let m=from;m<to;m+=SLOT) if(SLOTS.includes(m)) set.add(m);
-  applyDay(date,set);
-  toast('Interval označený','ok',2000);
+  applyDay(date,set); toast('Interval označený','ok',2000);
 }
 function markFull(){
   if(!me||isHost) return;
@@ -702,8 +628,7 @@ function clearDay(){
   const date=document.getElementById('ctrl-day').value;
   const i=weekDates(weekStart).indexOf(date);
   if(!confirm('Vymazať záznamy pre '+(i>=0?DAY_NAMES[i]:date)+' '+fmtD(date)+'?')) return;
-  applyDay(date,new Set());
-  toast('Záznamy vymazané','ok',2000);
+  applyDay(date,new Set()); toast('Záznamy vymazané','ok',2000);
 }
 
 /* ═══ RENDER ════════════════════════════════════════ */
@@ -714,7 +639,6 @@ function usersInDay(date){
   const ids=new Set(db.schedules.filter(s=>s.date===date).map(s=>s.user_id));
   return db.users.filter(u=>ids.has(u.id));
 }
-
 function renderCal(){
   const tbl=document.getElementById('cal-table');
   const dates=weekDates(weekStart), td=today();
@@ -724,18 +648,15 @@ function renderCal(){
   const ro=isHost||!me;
 
   const lowNames=dates.filter((_,i)=>isLow[i]).map(d=>DAY_NAMES[dates.indexOf(d)]+' '+fmtD(d));
-  const wb=document.getElementById('low-warn');
   document.getElementById('warn-days').textContent=lowNames.join(' · ');
-  wb.classList.toggle('show',lowNames.length>0);
+  document.getElementById('low-warn').classList.toggle('show',lowNames.length>0);
 
   let h='<thead><tr><th class="th-time">Čas</th>';
   dates.forEach((d,i)=>{
-    let c='th-day';
-    if(d===td)c+=' today'; if(isGood[i])c+=' good'; if(isLow[i])c+=' low';
+    let c='th-day'; if(d===td)c+=' today'; if(isGood[i])c+=' good'; if(isLow[i])c+=' low';
     h+=`<th class="${c}"><div class="dn">${DAY_NAMES[i]}</div><div class="dd">${fmtD(d)}</div></th>`;
   });
   h+='</tr></thead><tbody>';
-
   SLOTS.forEach(slot=>{
     h+=`<tr><td class="time-lbl">${m2t(slot)}</td>`;
     dates.forEach((d,i)=>{
@@ -762,11 +683,9 @@ function renderCal(){
     h+=`</div></td>`;
   });
   h+='</tr></tfoot>';
-
   tbl.innerHTML=h;
   if(!ro) tbl.querySelectorAll('.slot:not(.ro)').forEach(c=>c.addEventListener('click',()=>toggleSlot(c.dataset.d,+c.dataset.s)));
 }
-
 function renderLegend(){
   document.getElementById('legend-items').innerHTML=db.users.map(u=>{
     const isMe=me&&u.id===me.id;
@@ -796,7 +715,7 @@ function fillControls(){
 async function gotoWeek(delta){
   weekStart.setDate(weekStart.getDate()+delta*7);
   updateWeekLbl(); if(!isHost&&me) fillControls();
-  try{ await binRead(); setSyncDot('ok'); }catch(e){ setSyncDot('err'); }
+  try{ await fbRead(); setSyncDot('ok'); }catch(e){ setSyncDot('err'); }
   renderCal();
 }
 
@@ -816,7 +735,7 @@ async function init(){
   document.getElementById('btn-next').addEventListener('click', ()=>gotoWeek(1));
   document.getElementById('btn-today').addEventListener('click', async()=>{
     weekStart=getMonday(); updateWeekLbl(); if(!isHost&&me) fillControls();
-    try{ await binRead(); setSyncDot('ok'); }catch(e){ setSyncDot('err'); }
+    try{ await fbRead(); setSyncDot('ok'); }catch(e){ setSyncDot('err'); }
     renderCal();
   });
   document.getElementById('btn-interval').addEventListener('click', addInterval);
@@ -825,7 +744,7 @@ async function init(){
 
   showLoad('Načítavam dáta…');
   try{
-    await binRead();
+    await fbRead();
     hideLoad();
     showScreen('login');
   }catch(e){
