@@ -230,6 +230,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .btn-exp-go:hover{opacity:.88}
 .btn-exp-cancel{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-s);padding:11px;font-size:14px;font-weight:600;color:var(--text-m);cursor:pointer;transition:all .18s}
 .btn-exp-cancel:hover{background:rgba(255,255,255,.1);color:var(--text)}
+
+/* ADMIN TABS */
+.admin-tabs{display:flex;gap:0;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.atab{padding:10px 20px;font-size:13px;font-weight:600;color:var(--text-m);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;user-select:none}
+.atab:hover{color:var(--text)}
+.atab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.atab-content{display:none}.atab-content.active{display:block}
+
+/* ADMIN CALENDAR */
+.acal-bar{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
+  border-radius:var(--radius);padding:10px 14px;margin-bottom:11px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.acal-user-sel{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--radius-s);color:var(--text);padding:8px 12px;font-size:13px;
+  outline:none;cursor:pointer;min-width:200px}
+.acal-user-sel:focus{border-color:var(--blue)}
+.acal-nav{display:flex;align-items:center;gap:7px;margin-left:auto}
+#acal-week-lbl{font-size:14px;font-weight:600;min-width:178px;text-align:center;white-space:nowrap}
+
+/* PAST DAY — uzamknuté pre bežného používateľa */
+.slot.past{cursor:not-allowed;opacity:.55}
+.slot.past:hover{background:transparent}
+.slot.past.gc:hover{background:rgba(16,185,129,.02)}
+.slot.past.lc:hover{background:rgba(239,68,68,.02)}
+.past-indicator{position:absolute;bottom:2px;right:5px;font-size:9px;color:rgba(255,255,255,.2);pointer-events:none;line-height:1}
   </style>
 </head>
 <body>
@@ -312,7 +337,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <!-- ADMIN -->
 <div id="screen-admin" class="screen">
   <header class="app-hdr">
-    <span class="hdr-logo">⚙️</span><span class="hdr-title">Správa používateľov</span>
+    <span class="hdr-logo">⚙️</span><span class="hdr-title">Admin panel</span>
     <div style="margin-left:auto"></div>
     <div class="hdr-right">
       <span class="hdr-name">Admin</span>
@@ -320,32 +345,61 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     </div>
   </header>
   <div class="admin-wrap">
-    <div class="panel">
-      <div class="phdr"><span>➕</span><span class="phdr-title">Pridať používateľa</span></div>
-      <div class="pbody">
-        <div class="fgrid">
-          <div class="fgroup"><label class="flbl">Login</label><input class="finp" id="a-un" type="text" placeholder="jan.novak" autocomplete="off"></div>
-          <div class="fgroup"><label class="flbl">Zobrazované meno</label><input class="finp" id="a-dn" type="text" placeholder="Ján Novák"></div>
-          <div class="fgroup"><label class="flbl">Farba</label>
-            <div style="display:flex;gap:6px;align-items:center">
-              <input class="fcol" type="color" id="a-col" value="#3b82f6">
-              <button class="btn-rnd" onclick="randColor('a-col')">🎲</button>
+
+    <!-- TABS -->
+    <div class="admin-tabs">
+      <div class="atab active" onclick="switchAdminTab('users')">👥 Používatelia</div>
+      <div class="atab" onclick="switchAdminTab('cal')">📅 Kalendár (história)</div>
+    </div>
+
+    <!-- TAB: POUŽÍVATELIA -->
+    <div class="atab-content active" id="atab-users">
+      <div class="panel">
+        <div class="phdr"><span>➕</span><span class="phdr-title">Pridať používateľa</span></div>
+        <div class="pbody">
+          <div class="fgrid">
+            <div class="fgroup"><label class="flbl">Login</label><input class="finp" id="a-un" type="text" placeholder="jan.novak" autocomplete="off"></div>
+            <div class="fgroup"><label class="flbl">Zobrazované meno</label><input class="finp" id="a-dn" type="text" placeholder="Ján Novák"></div>
+            <div class="fgroup"><label class="flbl">Farba</label>
+              <div style="display:flex;gap:6px;align-items:center">
+                <input class="fcol" type="color" id="a-col" value="#3b82f6">
+                <button class="btn-rnd" onclick="randColor('a-col')">🎲</button>
+              </div>
             </div>
+            <div class="fgroup"><label class="flbl">Heslo</label><input class="finp" id="a-pw" type="text" placeholder="heslo" autocomplete="off"></div>
+            <div class="fgroup" style="justify-content:flex-end"><button class="btn btn-blue" onclick="addUser()">➕ Pridať</button></div>
           </div>
-          <div class="fgroup"><label class="flbl">Heslo</label><input class="finp" id="a-pw" type="text" placeholder="heslo" autocomplete="off"></div>
-          <div class="fgroup" style="justify-content:flex-end"><button class="btn btn-blue" onclick="addUser()">➕ Pridať</button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="phdr"><span>👥</span><span class="phdr-title">Používatelia</span><span class="phdr-count" id="user-count">–</span></div>
+        <div style="padding:0">
+          <table class="utbl">
+            <thead><tr><th>Login</th><th>Meno</th><th>Farba</th><th>Heslo</th><th>Akcie</th></tr></thead>
+            <tbody id="user-tbody"><tr><td colspan="5" class="empty">Načítavam…</td></tr></tbody>
+          </table>
         </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="phdr"><span>👥</span><span class="phdr-title">Používatelia</span><span class="phdr-count" id="user-count">–</span></div>
-      <div style="padding:0">
-        <table class="utbl">
-          <thead><tr><th>Login</th><th>Meno</th><th>Farba</th><th>Heslo</th><th>Akcie</th></tr></thead>
-          <tbody id="user-tbody"><tr><td colspan="5" class="empty">Načítavam…</td></tr></tbody>
-        </table>
+
+    <!-- TAB: ADMIN KALENDÁR -->
+    <div class="atab-content" id="atab-cal">
+      <div class="acal-bar">
+        <span style="font-size:11px;font-weight:700;color:var(--text-m);text-transform:uppercase;letter-spacing:.4px">Používateľ:</span>
+        <select class="acal-user-sel" id="acal-user" onchange="renderAdminCal()"></select>
+        <div class="acal-nav">
+          <button class="wk-btn" onclick="acalWeek(-1)">‹</button>
+          <span id="acal-week-lbl">–</span>
+          <button class="wk-btn" onclick="acalWeek(1)">›</button>
+          <button class="btn-hdr" onclick="acalToday()">Dnes</button>
+        </div>
+      </div>
+      <div class="cal-wrap"><div class="cal-scroll"><table class="cal-table" id="acal-table"></table></div></div>
+      <div style="padding:6px 2px;font-size:11px;color:var(--text-m)">
+        ✏️ Admin môže editovať <strong style="color:var(--text)">akýkoľvek deň</strong> vrátane histórie pre vybraného používateľa.
       </div>
     </div>
+
   </div>
 </div>
 
@@ -377,6 +431,7 @@ const SLOTS = []; for(let m=WORK_START; m<WORK_END; m+=SLOT) SLOTS.push(m);
 let db        = {users:[], schedules:[]};
 let me        = null;
 let isHost    = false;
+let isAdmin   = false;
 let weekStart = null;
 let saveTimer = null;
 let isSaving  = false;
@@ -555,11 +610,20 @@ function doLogout(){
 /* ═══ ADMIN ═════════════════════════════════════════ */
 async function enterAdmin(){
   showLoad('Načítavam admin…');
-  try{ await fbRead(); renderAdminUsers(); randColor('a-col'); showScreen('admin'); }
+  try{
+    await fbRead();
+    isAdmin = true;
+    renderAdminUsers();
+    randColor('a-col');
+    acalWeekStart = getMonday();
+    fillAcalUserSel();
+    updateAcalWeekLbl();
+    showScreen('admin');
+  }
   catch(e){ toast('Chyba: '+e.message,'err',6000); }
   finally{ hideLoad(); }
 }
-function adminLogout(){ showScreen('login'); document.getElementById('u-un').value=''; document.getElementById('u-pw').value=''; }
+function adminLogout(){ isAdmin=false; showScreen('login'); document.getElementById('u-un').value=''; document.getElementById('u-pw').value=''; }
 
 function renderAdminUsers(){
   const users=db.users;
@@ -700,12 +764,15 @@ function renderCal(){
       const mine=me&&users.some(u=>u.id===me.id);
       const cc=isLow[i]?' lc':isGood[i]?' gc':'';
       const bg=mine?`background:${rgba(me.color,0.18)};`:'';
-      h+=`<td class="slot${mine?' own':''}${cc}${ro?' ro':''}" style="${bg}" data-d="${d}" data-s="${slot}"><div class="chips">`;
+      const isPast = d < td;
+      const locked = !ro && !isAdmin && isPast;
+      const slotRo = ro || locked;
+      h+=`<td class="slot${mine?' own':''}${cc}${slotRo?' ro':''}${locked?' past':''}" style="${bg}" data-d="${d}" data-s="${slot}"><div class="chips">`;
       users.forEach(u=>{
         const isMe=me&&u.id===me.id;
         h+=`<div class="chip${isMe?' mine':''}" style="background:${rgba(u.color,.3)};border-color:${rgba(u.color,.72)};color:${u.color};box-shadow:0 1px 7px ${rgba(u.color,.22)}" title="${esc(u.display_name)}">${inits(u.display_name)}</div>`;
       });
-      h+=`</div>${!ro?`<span class="hint">${mine?'−':'+'}</span>`:''}</td>`;
+      h+=`</div>${locked?'<span class="past-indicator">🔒</span>':(!slotRo?`<span class="hint">${mine?'−':'+'}</span>`:'')}</td>`;
     });
     h+='</tr>';
   });
@@ -720,7 +787,7 @@ function renderCal(){
   });
   h+='</tr></tfoot>';
   tbl.innerHTML=h;
-  if(!ro) tbl.querySelectorAll('.slot:not(.ro)').forEach(c=>c.addEventListener('click',()=>toggleSlot(c.dataset.d,+c.dataset.s)));
+  if(!ro) tbl.querySelectorAll('.slot:not(.ro):not(.past)').forEach(c=>c.addEventListener('click',()=>toggleSlot(c.dataset.d,+c.dataset.s)));
 }
 function renderLegend(){
   document.getElementById('legend-items').innerHTML=db.users.map(u=>{
@@ -788,6 +855,113 @@ async function init(){
     showScreen('login');
     toast('Chyba načítania: '+e.message,'err',10000);
   }
+}
+
+
+/* ═══ ADMIN TABS ════════════════════════════════════ */
+function switchAdminTab(tab){
+  document.querySelectorAll('.atab').forEach((t,i)=>{
+    t.classList.toggle('active', (tab==='users'&&i===0)||(tab==='cal'&&i===1));
+  });
+  document.getElementById('atab-users').classList.toggle('active', tab==='users');
+  document.getElementById('atab-cal').classList.toggle('active', tab==='cal');
+  if(tab==='cal'){ fillAcalUserSel(); renderAdminCal(); }
+}
+
+/* ═══ ADMIN KALENDÁR — edituje históriu pre kohokoľvek ═ */
+let acalWeekStart = null;
+let acalUser = null;
+
+function fillAcalUserSel(){
+  const sel = document.getElementById('acal-user');
+  const prev = sel.value;
+  sel.innerHTML = db.users.map(u=>`<option value="${u.id}">${esc(u.display_name)} (${esc(u.username)})</option>`).join('');
+  if(prev && db.users.find(u=>u.id===prev)) sel.value = prev;
+  acalUser = db.users.find(u=>u.id===sel.value) || db.users[0] || null;
+}
+
+function updateAcalWeekLbl(){
+  if(!acalWeekStart) return;
+  const d=weekDates(acalWeekStart), yr=new Date(d[0]+'T12:00:00').getFullYear();
+  document.getElementById('acal-week-lbl').textContent=fmtD(d[0])+' – '+fmtD(d[4])+' '+yr;
+}
+
+function acalWeek(delta){
+  if(!acalWeekStart) acalWeekStart=getMonday();
+  acalWeekStart.setDate(acalWeekStart.getDate()+delta*7);
+  updateAcalWeekLbl(); renderAdminCal();
+}
+
+function acalToday(){
+  acalWeekStart=getMonday(); updateAcalWeekLbl(); renderAdminCal();
+}
+
+function renderAdminCal(){
+  const selId = document.getElementById('acal-user').value;
+  acalUser = db.users.find(u=>u.id===selId) || null;
+  if(!acalUser || !acalWeekStart){ document.getElementById('acal-table').innerHTML=''; return; }
+
+  const tbl=document.getElementById('acal-table');
+  const dates=weekDates(acalWeekStart), td=today();
+  const dayU=dates.map(d=>usersInDay(d));
+  const isLow=dayU.map(u=>u.length<MIN_STAFF);
+  const isGood=dayU.map(u=>u.length>=MIN_STAFF);
+
+  let h='<thead><tr><th class="th-time">Čas</th>';
+  dates.forEach((d,i)=>{
+    let cls='th-day';
+    if(d===td) cls+=' today';
+    if(isGood[i]) cls+=' good';
+    if(isLow[i]) cls+=' low';
+    h+='<th class="'+cls+'"><div class="dn">'+DAY_NAMES[i]+'</div><div class="dd">'+fmtD(d)+'</div></th>';
+  });
+  h+='</tr></thead><tbody>';
+
+  SLOTS.forEach(slot=>{
+    h+='<tr><td class="time-lbl">'+m2t(slot)+'</td>';
+    dates.forEach((d,i)=>{
+      const users=usersInSlot(d,slot);
+      const mine=users.some(u=>u.id===acalUser.id);
+      const cc=isLow[i]?' lc':isGood[i]?' gc':'';
+      const bg=mine?'background:'+rgba(acalUser.color,0.18)+';':'';
+      h+='<td class="slot'+( mine?' own':'')+cc+'" style="'+bg+'" data-d="'+d+'" data-s="'+slot+'"><div class="chips">';
+      users.forEach(u=>{
+        const isTarget=u.id===acalUser.id;
+        h+='<div class="chip'+(isTarget?' mine':'')+'" style="background:'+rgba(u.color,.3)+';border-color:'+rgba(u.color,.72)+';color:'+u.color+'" title="'+esc(u.display_name)+'">'+inits(u.display_name)+'</div>';
+      });
+      h+='</div><span class="hint">'+(mine?'−':'+')+'</span></td>';
+    });
+    h+='</tr>';
+  });
+  h+='</tbody><tfoot><tr><td style="color:var(--text-d);font-size:11px;padding:6px">👥</td>';
+  dates.forEach((d,i)=>{
+    const users=dayU[i],cnt=users.length;
+    const cc=cnt===0?'no':isLow[i]?'low':'ok';
+    const fc=isLow[i]?' lc':isGood[i]?' gc':'';
+    h+='<td class="tfoot-cell'+fc+'"><span class="scnt '+cc+'">'+(cnt||'–')+'</span><div class="snames">';
+    users.forEach(u=>{ h+='<span class="sname" style="color:'+u.color+'">'+esc(u.display_name)+'</span>'; });
+    h+='</div></td>';
+  });
+  h+='</tr></tfoot>';
+  tbl.innerHTML=h;
+
+  tbl.querySelectorAll('.slot').forEach(cell=>{
+    cell.addEventListener('click',()=>adminToggleSlot(cell.dataset.d, +cell.dataset.s));
+  });
+}
+
+function adminToggleSlot(date, slot){
+  if(!acalUser) return;
+  const set = new Set();
+  db.schedules.filter(s=>s.user_id===acalUser.id&&s.date===date).forEach(s=>{
+    const a=t2m(s.start_time), b=t2m(s.end_time);
+    for(let m=a;m<b;m+=SLOT) if(SLOTS.includes(m)) set.add(m);
+  });
+  if(set.has(slot)) set.delete(slot); else set.add(slot);
+  db.schedules=db.schedules.filter(s=>!(s.user_id===acalUser.id&&s.date===date));
+  toIvs(set).forEach(function(iv){ db.schedules.push({id:uid(),user_id:acalUser.id,date:date,start_time:iv[0],end_time:iv[1]}); });
+  renderAdminCal();
+  scheduleSave();
 }
 
 document.addEventListener('DOMContentLoaded', init);
